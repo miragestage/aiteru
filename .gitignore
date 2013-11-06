@@ -15,12 +15,4 @@ build
 /fuel/app/cache/*/*
 /fuel/app/config/crypt.php
 nbproject/
-.gitmodules
-.project
-CHANGELOG.md
-composer.*
-CONTRIBUTING.md
-oil
-README.md
-TESTING.md
-.buildpath
+
