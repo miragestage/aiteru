@@ -13,7 +13,7 @@ CREATE DATABASE aiteru;
 -- CHARACTER SET = utf8;
 
 -- ユーザー作成
-GRANT ALL PRIVILEGES ON *.* TO koyo_root@localhost IDENTIFIED BY 'aiteru';
+GRANT ALL PRIVILEGES ON *.* TO aiteru@localhost IDENTIFIED BY '.aiteru';
 FLUSH PRIVILEGES;
 
 -- ユーザー確認
