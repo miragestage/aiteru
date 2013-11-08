@@ -1,0 +1,1 @@
+\. D:/cite/maruei/DDL/create_table.sql
