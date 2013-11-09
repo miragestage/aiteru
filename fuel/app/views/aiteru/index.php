@@ -16,7 +16,7 @@ $db_hostport = $config["port"];
 $db_username = $config["user"];
 $db_password = $config["password"];
 
-echo $db_hostname;
-echo $db_hostport;
-echo $db_password;
-echo $db_username;
+echo $db_hostname . "<br />";
+echo $db_hostport . "<br />";
+echo $db_password . "<br />";
+echo $db_username . "<br />";
