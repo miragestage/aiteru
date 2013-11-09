@@ -17,3 +17,6 @@ $db_username = $config["user"];
 $db_password = $config["password"];
 
 echo $db_hostname;
+echo $db_hostport;
+echo $db_password;
+echo $db_username;
