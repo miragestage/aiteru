@@ -6,8 +6,8 @@
 	<li class="treenodeopen"><a href="">Menu</a>
 		<ul>
 			<li><a href="/" class="text">TOP</a></li>
-			<li><a href="/aiteru/gmap/gmap" class="text">グーグルマップ</a></li>
-			<li><a href="/aiteru/shop/shop" class="text">店舗登録</a></li>
+			<li><a href="/aiteru/top/gmap" class="text">グーグルマップ</a></li>
+			<li><a href="/aiteru/top/shop" class="text">店舗登録</a></li>
 			<li><a href="/upload" class="text">画像アップロードテスト</a></li>
 		</ul>
 	</li>
