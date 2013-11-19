@@ -45,9 +45,9 @@ function MapOpen() {
 	     $("input[name='lat']").val(this.position.lat());
 	     $("input[name='lng']").val(this.position.lng());
 
-         var location ="<li>"+"緯度：" + this.position.lat() + "</li>";
-         location += "<li>"+"経度：" + this.position.lng() + "</li>";
-         document.getElementById("location").innerHTML = location;
+         //var location ="<li>"+"緯度：" + this.position.lat() + "</li>";
+         //location += "<li>"+"経度：" + this.position.lng() + "</li>";
+         //$("#location").html(location);
 
 	  }
 	});
@@ -68,9 +68,9 @@ $(document).ready(function(){
 
       // （1）位置情報の取得に成功した場合
       function (pos) {
-        var location ="<li>"+"緯度：" + pos.coords.latitude + "</li>";
-        location += "<li>"+"経度：" + pos.coords.longitude + "</li>";
-        document.getElementById("location").innerHTML = location;
+        //var location ="<li>"+"緯度：" + pos.coords.latitude + "</li>";
+        //location += "<li>"+"経度：" + pos.coords.longitude + "</li>";
+        //$("#location").html(location);
         latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         MapOpen();
       },
@@ -120,10 +120,10 @@ $(document).ready(function(){
 		  $("input[name='lat']").val(latlng.lat());
 		  $("input[name='lng']").val(latlng.lng());
 
-          var location ="<li>"+"緯度：" + latlng.lat() + "</li>";
-          location += "<li>"+"経度：" + latlng.lng() + "</li>";
-          document.getElementById("location").innerHTML = location;
-
+          //var location ="<li>"+"緯度：" + latlng.lat() + "</li>";
+          //location += "<li>"+"経度：" + latlng.lng() + "</li>";
+          //$("#location").html(location);
+ 
 		  //マーカーの位置を変更
 		  changeMarkerPosition(latlng.lat(), latlng.lng());
         }
@@ -166,7 +166,7 @@ function goBack(){
 	<div id="map"></div>
 
 	<form name="test" action="/aiteru/layer/test" method="post" id="latlng">
-		<input type="text" id="lat" name="lat" />
+		<input type="text" id="lat" name="lat" /><br />
 		<input type="text" id="lng" name="lng" />
 		<input type="button" onclick="goBack()" value="OK" />
 	</form>

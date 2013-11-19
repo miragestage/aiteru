@@ -47,11 +47,9 @@ class Controller_Aiteru_Top extends Controller_Template
 			);
 	
 			//モデルのインスタンス化
-			
 			$new=Model_Shop::forge($dataM);
 	
 			//データの保存
-	
 			$new->save();
 	
 		}
