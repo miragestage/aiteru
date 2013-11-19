@@ -25,14 +25,15 @@ echo '</p>';
 
 echo '<p>';
 echo Form::label('緯度', 'gmap_lat');
-echo Form::input('gmap_lat', "", array('size' => 40));
+echo Form::input('gmap_lat',"", array('size' => 40));
 echo '</p>';
 
 echo '<p>';
 echo Form::label('経度', 'gmap_lng');
-echo Form::input('gmap_lng', "", array('size' => 40));
+echo Form::input('gmap_lng',"", array('size' => 40));
 echo '</p>';
 
+echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden'));
 
 echo Form::submit('save', '登録');
 

@@ -34,11 +34,13 @@ class Controller_Aiteru_Top extends Controller_Template
 	{
 		$this->template->title = 'shop';
 			
-		if (isset($_POST['save']))
+		//if (isset($_POST['save']))
+		//if (isset($_POST['save']) && Security::check_token())
+		if (Security::check_token())
 		{
-			$data = array();
+			$dataM = array();
 	
-			$data = array(
+			$dataM = array(
 					'name' => Input::post('name'),
 					'gmap_lat' => Input::post('gmap_lat'),
 					'gmap_lng' => Input::post('gmap_lng')
@@ -46,7 +48,7 @@ class Controller_Aiteru_Top extends Controller_Template
 	
 			//モデルのインスタンス化
 			
-			$new=Model_Shop::forge($data);
+			$new=Model_Shop::forge($dataM);
 	
 			//データの保存
 	
@@ -58,7 +60,11 @@ class Controller_Aiteru_Top extends Controller_Template
 		$data = Model_Shop::find_all();
 	
 		$view = View::forge('aiteru/shop');
+		
+		$token['token_key'] = Config::get('security.csrf_token_key');
+		$token['token'] = Security::fetch_token();
 		$view->set_global('shops', $data);
+		$view->set_global('token', $token);
 		
 		//Session::set('name', $data[0]['name']);
 		

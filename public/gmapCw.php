@@ -168,7 +168,6 @@ function goBack(){
 	<form name="test" action="/aiteru/layer/test" method="post" id="latlng">
 		<input type="text" id="lat" name="lat" />
 		<input type="text" id="lng" name="lng" />
-		<input type="submit" value="OK" />
 		<input type="button" onclick="goBack()" value="OK" />
 	</form>
 
