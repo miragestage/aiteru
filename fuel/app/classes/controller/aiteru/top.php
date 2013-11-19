@@ -73,4 +73,21 @@ class Controller_Aiteru_Top extends Controller_Template
 			
 	}
 	
+	public function action_routem()
+	{
+		$this->template->title = 'gmap';
+		
+		$data = array();
+		$data['lat'] = 35.769131526325424;
+		$data['lng'] = 139.46262565189204;
+		
+		$view = View::forge('aiteru/routem');
+		$view->set_global('latlng', $data);
+		
+		//テンプレートに自分自身のviewを埋め込む
+		$this->template->content = View::forge('aiteru/routem');
+		
+		return;
+		
+	}
 }

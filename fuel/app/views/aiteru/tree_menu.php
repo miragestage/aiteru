@@ -8,7 +8,7 @@
 			<li><a href="/" class="text">TOP</a></li>
 			<li><a href="/aiteru/top/gmap" class="text">グーグルマップ</a></li>
 			<li><a href="/aiteru/top/shop" class="text">店舗登録</a></li>
-			<li><a href="/aiteru/layer/test" class="text">テスト</a></li>
+			<li><a href="/aiteru/top/routem" class="text">ルートマップ</a></li>
 		</ul>
 	</li>
 	<!-- 
