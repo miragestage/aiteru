@@ -78,8 +78,8 @@ class Controller_Aiteru_Top extends Controller_Template
 		$this->template->title = 'gmap';
 		
 		$data = array();
-		$data['lat'] = 35.769131526325424;
-		$data['lng'] = 139.46262565189204;
+		$data['lat'] = 26.326036618734133;
+		$data['lng'] = 127.80387890966188;
 		
 		$view = View::forge('aiteru/routem');
 		$view->set_global('latlng', $data);
