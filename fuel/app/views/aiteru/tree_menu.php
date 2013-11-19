@@ -8,9 +8,10 @@
 			<li><a href="/" class="text">TOP</a></li>
 			<li><a href="/aiteru/top/gmap" class="text">グーグルマップ</a></li>
 			<li><a href="/aiteru/top/shop" class="text">店舗登録</a></li>
-			<li><a href="/upload" class="text">画像アップロードテスト</a></li>
+			<li><a href="/aiteru/layer/test" class="text">テスト</a></li>
 		</ul>
 	</li>
+	<!-- 
 	<li class="treenodeopen"><a href="">マスタ管理</a>
 		<ul>
 			<li><a href="#" class="text">User登録</a></li>
@@ -45,4 +46,5 @@
 			<li><a href="/options/phpinfo" class="text">phpinfo</a></li>
 		</ul>
 	</li>
+	 -->
 </ul>

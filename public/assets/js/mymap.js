@@ -1,6 +1,3 @@
-
-<script type="text/javascript">
-
 var map;
 var marker;
 //var latLng = new google.maps.LatLng(26.334388138401824, 127.8055832);
@@ -47,7 +44,7 @@ function changeMarkerPosition(lat, lng) {
     marker.setPosition(latlng);
 }
 
-$(document).ready(function(){
+$(function(){
 
   if (navigator.geolocation) {
 
@@ -122,29 +119,3 @@ $(document).ready(function(){
 
 
 });
-
-
-</script>
-
-	<form method="post" id="geocoding_form">
-	<label for="address">市町村名や住所等を入力してください。aaaa</label>
-	<?php echo $name; ?>
-	<div class="input">
-	  <input type="text" id="address" name="address" />
-	  <input type="submit" class="btn" value="検索" />
-	</div>
-	</form>
-
-	<div id="map"></div>
-
-	<form action="/aiteru/layer/test" method="post" id="latlng">
-		<input type="text" name="lat" />
-		<input type="text" name="lng" />
-		<input type="submit" value="OK" />
-		<input type="button" onclick="window.close()" value="OK" />
-	</form>
-
-	<ul id="location">
-	</ul>
-
-

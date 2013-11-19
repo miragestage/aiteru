@@ -1,6 +1,17 @@
+<script type="text/javascript">
+
+
+$(function() {
+	$(".button_gmap").click(function(){
+		window.open("/gmapCw.php", "WindowName","width=600,height=650,resizable=yes,scrollbars=no");
+		return false;
+	});
+});
+</script>
+
 <?php  
 
-echo Form::open('aiteru/shop/shop');
+echo Form::open(array('action' => 'aiteru/top/shop', 'name' => "shop"));
 
 echo '<p>';
 
@@ -9,7 +20,7 @@ echo '</p>';
 
 echo '<p>';
 echo Form::label('お店の名前', 'name');
-echo Form::input('name', "", array('size' => 40));
+echo Form::input('name', $shops[0]['name'], array('size' => 40));
 echo '</p>';
 
 echo '<p>';
@@ -22,30 +33,16 @@ echo Form::label('経度', 'gmap_lng');
 echo Form::input('gmap_lng', "", array('size' => 40));
 echo '</p>';
 
+
 echo Form::submit('save', '登録');
 
 echo Form::close();
 ?>
-<link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" />
 
-<form class="form-horizontal">
-<fieldset>
-<legend>Controls Bootstrap supports</legend>
-<div class="control-group">
-<label class="control-label" for="input01">Text input</label>
-<div class="controls">
-<input type="text" class="input-xlarge" id="input01">
-<p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p>
-</div>
-</div>
-<div class="form-actions">
-<button type="submit" class="btn btn-primary">Save changes</button>
-<button class="btn">Cancel</button>
-</div>
-</fieldset>
-</form>
+<input type="button" value="地図" class="button_gmap" >
 
-<?php  
+<?php 
+echo "<br />";
 foreach ($shops as $shop)
 {
 	echo $shop['name'];

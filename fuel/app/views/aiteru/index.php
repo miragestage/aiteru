@@ -1,6 +1,6 @@
 <?php
  
-
+if (Fuel::$env == 'development' ) return;
 // 環境変数参照
 $vcap_services = getenv( 'VCAP_SERVICES' );
 if ( $vcap_services === false ) {

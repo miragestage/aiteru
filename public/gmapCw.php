@@ -1,3 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+
+<link rel="shortcut icon" href="/favicon.ico" />
+<title>gmap</title>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/gmaps.js"></script>
 
 <script type="text/javascript">
 
@@ -123,12 +135,28 @@ $(document).ready(function(){
 
 });
 
-
+function goBack(){
+	var gmapLat = document.getElementById("lat");
+	var gmapLng = document.getElementById("lng");
+	//alert(gmapLat.value);
+	//window.opener.document.getElementById('title01').innerHTML = gmapLat.value;
+	window.opener.document.shop.gmap_lat.value = gmapLat.value;
+	window.opener.document.shop.gmap_lng.value = gmapLng.value;
+	window.close();
+}
 </script>
 
+<style type="text/css">
+#map {
+	width: 100%;
+	height:500px;
+}
+</style>
+
+<body>
+
 	<form method="post" id="geocoding_form">
-	<label for="address">市町村名や住所等を入力してください。aaaa</label>
-	<?php echo $name; ?>
+	<label for="address">市町村名や住所等を入力してください。</label>
 	<div class="input">
 	  <input type="text" id="address" name="address" />
 	  <input type="submit" class="btn" value="検索" />
@@ -137,14 +165,16 @@ $(document).ready(function(){
 
 	<div id="map"></div>
 
-	<form action="/aiteru/layer/test" method="post" id="latlng">
-		<input type="text" name="lat" />
-		<input type="text" name="lng" />
+	<form name="test" action="/aiteru/layer/test" method="post" id="latlng">
+		<input type="text" id="lat" name="lat" />
+		<input type="text" id="lng" name="lng" />
 		<input type="submit" value="OK" />
-		<input type="button" onclick="window.close()" value="OK" />
+		<input type="button" onclick="goBack()" value="OK" />
 	</form>
 
 	<ul id="location">
 	</ul>
 
+</body>
+</html>
 

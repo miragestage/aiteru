@@ -11,9 +11,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="/assets/js/gmaps.js"></script>
 
-<script type="text/javascript">
 
-</script>
 
 <style type="text/css">
 
@@ -75,6 +73,34 @@ body {
 	height:500px;
 }
 
+div#glayLayer {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background: black;
+	filter: alpha(opacity =     60);
+	opacity: 0.60;
+}
+
+* html div#glayLayer {
+	position: absolute;
+}
+
+#overLayer {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -150px;
+	margin-left: -150px;
+}
+
+* html #overLayer {
+	position: absolute;
+}
 </style>
 </head>
 <body>
