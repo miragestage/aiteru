@@ -47,7 +47,7 @@ function changeMarkerPosition(lat, lng) {
     marker.setPosition(latlng);
 }
 
-$(document).ready(function(){
+$(function(){
 
   if (navigator.geolocation) {
 
