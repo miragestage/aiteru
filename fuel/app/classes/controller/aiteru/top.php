@@ -1,5 +1,6 @@
 <?php
 
+use Fuel\Core\Validation;
 class Controller_Aiteru_Top extends Controller_Template
 {
 
@@ -33,34 +34,64 @@ class Controller_Aiteru_Top extends Controller_Template
 	public function action_shop()
 	{
 		$this->template->title = 'shop';
-			
+		$errors = array();
+		$errors['name'] = '';
+		$errors['gmap_lat'] = '';
+		$errors['gmap_lng'] = '';
+		
 		//if (isset($_POST['save']))
 		//if (isset($_POST['save']) && Security::check_token())
 		if (Security::check_token())
 		{
-			$dataM = array();
-	
-			$dataM = array(
+			
+			$val = Validation::forge();
+			
+			$val->add('name', 'お名前')
+				->add_rule('required');
+
+			$val->add('gmap_lat', '緯度')
+				->add_rule( 'required')
+				->add_rule('valid_string', array('numeric', 'dots'));
+			
+			$val->add('gmap_lng', '経度')
+				->add_rule( 'required')
+				->add_rule('valid_string', array('numeric', 'dots'));
+
+			if($val->run())
+			{
+				$data = array();
+		
+				$data = array(
 					'name' => Input::post('name'),
 					'gmap_lat' => Input::post('gmap_lat'),
 					'gmap_lng' => Input::post('gmap_lng')
-			);
-	
-			//モデルのインスタンス化
-			$new=Model_Shop::forge($dataM);
-	
-			//データの保存
-			$new->save();
-	
+				);
+		
+				//モデルのインスタンス化
+				$new=Model_Shop::forge($data);
+		
+				//データの保存
+				$new->save();
+				
+			}else{
+				
+			    foreach($val->error() as $key => $e)
+			    {
+			        $errors[$key] = $e->get_message();
+			        //echo $key;
+ 				}
+ 				
+			}
 		}
 		
-		
+ 					
 		$data = Model_Shop::find_all();
 	
 		$view = View::forge('aiteru/shop');
 		
 		$token['token_key'] = Config::get('security.csrf_token_key');
 		$token['token'] = Security::fetch_token();
+ 		$view->set_global('errors', $errors);
 		$view->set_global('shops', $data);
 		$view->set_global('token', $token);
 		

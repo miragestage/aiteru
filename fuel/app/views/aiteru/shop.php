@@ -8,7 +8,12 @@ $(function() {
 	});
 });
 </script>
-
+<style type="text/css">
+.error {
+	font-size: 0.5em;
+	color: red;
+}
+</style>
 <?php  
 
 echo Form::open(array('action' => 'aiteru/top/shop', 'name' => "shop"));
@@ -20,17 +25,20 @@ echo '</p>';
 
 echo '<p>';
 echo Form::label('お店の名前', 'name');
-echo Form::input('name', $shops[0]['name'], array('size' => 40));
+echo Form::input('name', '', array('size' => 40));
+echo "<span class='error' >" .$errors['name'] ."</span>";
 echo '</p>';
 
 echo '<p>';
 echo Form::label('緯度', 'gmap_lat');
 echo Form::input('gmap_lat',"", array('size' => 40));
+echo "<span class='error' >" .$errors['gmap_lat'] ."</span>";
 echo '</p>';
 
 echo '<p>';
 echo Form::label('経度', 'gmap_lng');
 echo Form::input('gmap_lng',"", array('size' => 40));
+echo "<span class='error' >" .$errors['gmap_lng'] ."</span>";
 echo '</p>';
 
 echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden'));
