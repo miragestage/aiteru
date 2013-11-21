@@ -33,7 +33,7 @@ try {
 	exit();
 }
 
-
+/*
 // ダミーテーブル作成
 echo "ダミーテーブル作成<br />";
 $sql = "DROP TABLE IF EXISTS `shops`;" . 
@@ -43,7 +43,7 @@ $params = array();
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 
-/*
+
 // ダミーデータinsert
 echo "ダミーデータinsert<br />";
 $sql = "INSERT INTO shops (name, gmap_lat, gmap_lng) " . 
