@@ -67,7 +67,12 @@ $(function(){
 <div id="title01"></div>
 
 
-<form name="test">
+<form name="test" action="/aiteru/top/search" method="post">
+<?php 
+echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden'));
+?>
+
+<p>おおまかな範囲の取得</p>
 <table class="table">
 <tr><th></th><th></th></tr>
 <tr>
@@ -79,28 +84,32 @@ $(function(){
 <td><input name="secondLat" type="text" value='<?php echo $data['secondLat'] ?>' /></td>
 </tr>
 <tr>
+<td>一秒あたりの距離（経度）</td>
+<td><input name="secondLng" type="text" value='<?php echo $data['secondLng'] ?>' /></td>
+</tr>
+<tr>
 <td>現在地（緯度）</td>
 <td><input name="rootLat" type="text" value='' /></td>
 </tr>
 <tr>
-<td>現在地（緯度）</td>
+<td>現在地（経度）</td>
 <td><input name="rootLng" type="text" value='' /></td>
+</tr>
+<tr>
+<td>検索半径（メートル）</td>
+<td><input name="rangeLimit" type="text" value='<?php echo $data['rangeLimit'] ?>' /></td>
 </tr>
 <tr>
 <td>検索範囲を度に変換（緯度始点）</td>
 <td><input name="rangeLatS" type="text" value='<?php echo $data['rangeLatS'] ?>' /></td>
 </tr>
 <tr>
-<td>検索範囲を度に変換（緯度終点）</td>
-<td><input name="rangeLatE" type="text" value='<?php echo $data['rangeLatE'] ?>' /></td>
-</tr>
-<tr>
-<td>一秒あたりの距離（経度）</td>
-<td><input name="secondLng" type="text" value='<?php echo $data['secondLng'] ?>' /></td>
-</tr>
-<tr>
 <td>検索範囲を度に変換（経度始点）</td>
 <td><input name="rangeLngS" type="text" value='<?php echo $data['rangeLngS'] ?>' /></td>
+</tr>
+<tr>
+<td>検索範囲を度に変換（緯度終点）</td>
+<td><input name="rangeLatE" type="text" value='<?php echo $data['rangeLatE'] ?>' /></td>
 </tr>
 <tr>
 <td>検索範囲を度に変換（経度終点）</td>
@@ -112,6 +121,10 @@ $(function(){
 </tr>
 
 </table>
+
+
+<input type="submit" value="検索" />
+</form>
 
 
 <?php 
@@ -126,6 +139,5 @@ foreach ($results as $shop)
 }
 
 ?>
-</form>
 
 </div>

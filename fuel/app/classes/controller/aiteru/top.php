@@ -46,6 +46,7 @@ class Controller_Aiteru_Top extends Controller_Template
 		
 		//if (isset($_POST['save']))
 		//if (isset($_POST['save']) && Security::check_token())
+		//csrf対策　2度押し　F5キー対策
 		if (Security::check_token())
 		{
 			//バリデーションの設定
@@ -86,19 +87,23 @@ class Controller_Aiteru_Top extends Controller_Template
 			        $errors[$key] = $e->get_message();
 			        //echo $key;
  				}
- 				
 			}
 		}
-		
  					
 		$data = Model_Shop::find_all();
 	
 		$view = View::forge('aiteru/shop');
 		
+		//csrf対策用　2度押し　F5キー等の対策
 		$token['token_key'] = Config::get('security.csrf_token_key');
 		$token['token'] = Security::fetch_token();
+		
+		//エラーメッセージを各フィールド別に表示させる
  		$view->set_global('errors', $errors);
-		$view->set_global('shops', $data);
+		
+ 		//店舗データ
+ 		$view->set_global('shops', $data);
+ 		//security用トークン
 		$view->set_global('token', $token);
 		
 		//Session::set('name', $data[0]['name']);
@@ -168,12 +173,12 @@ class Controller_Aiteru_Top extends Controller_Template
 	 * @param ルート経度 $lng
 	 * @return multitype:number
 	 */
-	public function getRange($lat, $lng)
+	public function getRange($lat, $lng, $rangeLimit)
 	{
 		$data = array();
 		
 		//検索範囲 メートル
-		$rangeLimit = 1000;
+		//$rangeLimit = 1000;
 		
 		//地球の半径(wikiより)
 		$r = 6378150;
@@ -208,6 +213,7 @@ class Controller_Aiteru_Top extends Controller_Template
 		$data['rangeLngS'] = $rangeLngS;
 		$data['rangeLngE'] = $rangeLngE;
 		
+		//2点間の距離を測定する
 		$data['distance'] = Controller_Aiteru_Top::getDistance(
 				$rangeLatS, $rangeLngS, $rangeLatE, $rangeLngE);
 		
@@ -222,26 +228,46 @@ class Controller_Aiteru_Top extends Controller_Template
 		$this->template->title = 'search';
 		
 		$data = array();
+		$result = array();
 		
-		$rootLat = Input::post('rootLat');
-		$data = Controller_Aiteru_Top::getRange(26.3257691, 127.78560189999996);
+		$rangeLimit = 500; //検索半径
+		$locationLat = 26.3257691;//緯度初期値
+		$locationLng = 127.78560189999996;//経度初期値
 		
+		//検索範囲の設定
+		$data = Controller_Aiteru_Top::getRange($locationLat, $locationLng, $rangeLimit);
 		
+		if (Security::check_token())
+		{
+			$rangeLimit = Input::post('rangeLimit');
+			$data = Controller_Aiteru_Top::getRange($locationLat, $locationLng, $rangeLimit);
+				
+			$query = DB::select()->from('shops');
+			$query->Where('gmap_lat', 'between', array($data['rangeLatS'], $data['rangeLatE']));
+			$query->Where('gmap_lng', 'between', array($data['rangeLngS'], $data['rangeLngE']));
+			$query->limit(100);
+			$result = $query->execute()->as_array();
+	
+			foreach ($result as $shop)
+			{
+				
+			}
+		}
+		
+		//検索半径
+		$data['rangeLimit'] = $rangeLimit;
+			
 		$view = View::forge('aiteru/search');
 		$view->set_global('data', $data);
 		
-		$query = DB::select()->from('shops');
-		$query->Where('gmap_lat', 'between', array($data['rangeLatS'], $data['rangeLatE']));
-		$query->Where('gmap_lng', 'between', array($data['rangeLngS'], $data['rangeLngE']));
-		$query->limit(100);
-		$result = $query->execute()->as_array();
-
-		foreach ($result as $shop)
-		{
-			
-		}
+		//csrf対策用　2度押し　F5キー等の対策
+		$token['token_key'] = Config::get('security.csrf_token_key');
+		$token['token'] = Security::fetch_token();
 		
+		//範囲内のデータ
 		$view->set_global('results', $result);
+		//security用トークン
+		$view->set_global('token', $token);
 		
 		//テンプレートに自分自身のviewを埋め込む
 		$this->template->content = View::forge('aiteru/search');
