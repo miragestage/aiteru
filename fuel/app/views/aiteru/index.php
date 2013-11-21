@@ -43,7 +43,7 @@ $params = array();
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 
-
+/*
 // ダミーデータinsert
 echo "ダミーデータinsert<br />";
 $sql = "INSERT INTO shops (name, gmap_lat, gmap_lng) " . 
@@ -65,7 +65,7 @@ $params = array();
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 $results = $stmt->fetchAll( PDO::FETCH_ASSOC );
-
+*/
 // 表示
 echo "表示<br />";
 echo print_r( $results ) . "<br />";
