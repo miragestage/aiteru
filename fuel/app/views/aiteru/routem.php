@@ -15,8 +15,8 @@ function MapOpen() {
 
 	//マーカー表示
 	marker = map.addMarker({
-		  lat: latLng.lat(),
-		  lng: latLng.lng()
+	  lat: latLng.lat(),
+	  lng: latLng.lng()
 	});
 }
 

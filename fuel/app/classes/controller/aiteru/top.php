@@ -16,6 +16,9 @@ class Controller_Aiteru_Top extends Controller_Template
 
 	}
 
+	/**
+	 * グーグルマップ
+	 */
 	public function action_gmap()
 	{
 		$this->template->title = 'gmap';
@@ -30,7 +33,9 @@ class Controller_Aiteru_Top extends Controller_Template
 	
 	}
 
-	
+	/**
+	 * 店舗登録　表示
+	 */
 	public function action_shop()
 	{
 		$this->template->title = 'shop';
@@ -43,7 +48,7 @@ class Controller_Aiteru_Top extends Controller_Template
 		//if (isset($_POST['save']) && Security::check_token())
 		if (Security::check_token())
 		{
-			
+			//バリデーションの設定
 			$val = Validation::forge();
 			
 			$val->add('name', 'お名前')
@@ -56,7 +61,8 @@ class Controller_Aiteru_Top extends Controller_Template
 			$val->add('gmap_lng', '経度')
 				->add_rule( 'required')
 				->add_rule('valid_string', array('numeric', 'dots'));
-
+			
+			//検証実行
 			if($val->run())
 			{
 				$data = array();
@@ -104,6 +110,9 @@ class Controller_Aiteru_Top extends Controller_Template
 			
 	}
 	
+	/**
+	 * ルートマップ
+	 */
 	public function action_routem()
 	{
 		$this->template->title = 'gmap';
@@ -122,7 +131,14 @@ class Controller_Aiteru_Top extends Controller_Template
 		
 	}
 	
-	//二点間の距離を測定 
+	/**
+	 * 二点間の距離を測定
+	 * @param 始点緯度 $lat1
+	 * @param 始点経度 $lng1
+	 * @param 終点緯度 $lat2
+	 * @param 終点経度 $lng2
+	 * @return number
+	 */
 	public function getDistance($lat1, $lng1, $lat2, $lng2)
 	{
 		//地球の半径(wikiより)
@@ -135,23 +151,29 @@ class Controller_Aiteru_Top extends Controller_Template
 		//東西の緯度の差をラジアンに変換
 		$lngRad = ($pi / 180 * ($lng1 - $lng2));
 		
-		//南北の距離
+		//南北の距離　地球の半径 * 緯度の差のラジアン
 		$latDistance = $r * $latRad;
 		
-		//測定する緯度の半径 * 地球の半径 * 経度の差のラジアン 
+		//測定する緯度の半径 *  経度の差のラジアン 
 		$lngDistance = cos($pi / 180 * $lat1) * $r * $lngRad;
 		
 		//ピタゴラスの定理
 		return sqrt(pow($latDistance, 2) + pow($lngDistance, 2));
 	}
 	
-	//検索する範囲を作成
+	
+	/**
+	 * 検索する範囲を作成
+	 * @param ルート緯度 $lat
+	 * @param ルート経度 $lng
+	 * @return multitype:number
+	 */
 	public function getRange($lat, $lng)
 	{
 		$data = array();
 		
 		//検索範囲 メートル
-		$rangeLimit = 500;
+		$rangeLimit = 1000;
 		
 		//地球の半径(wikiより)
 		$r = 6378150;
@@ -166,16 +188,16 @@ class Controller_Aiteru_Top extends Controller_Template
 		//一秒あたりの距離（緯度）
 		$secondLat = $earth/(360 * 60 * 60);
 		//検索範囲を度に変換（緯度始点）
-		$rangeLatS = $lat + ($rangeLimit / $secondLat / 60 / 60);
+		$rangeLatS = $lat + (-$rangeLimit / $secondLat / 60 / 60);
 		//検索範囲を度に変換（緯度終点）
-		$rangeLatE = $lat + (-$rangeLimit / $secondLat / 60 / 60);
+		$rangeLatE = $lat + ($rangeLimit / $secondLat / 60 / 60);
 		
 		//一秒あたりの距離（経度）
 		$secondLng = ($earth * cos($lat / 180 * $pi)) / (360 * 60 * 60);
 		//検索範囲を度に変換（経度始点）
-		$rangeLngS = $lng + ($rangeLimit / $secondLng / 60 / 60);
+		$rangeLngS = $lng + (-$rangeLimit / $secondLng / 60 / 60);
 		//検索範囲を度に変換（経度終点）
-		$rangeLngE = $lng + (-$rangeLimit / $secondLng / 60 / 60);
+		$rangeLngE = $lng + ($rangeLimit / $secondLng / 60 / 60);
 		
 		$data['earth'] = $earth;
 		$data['secondLat'] = $secondLat;
@@ -192,17 +214,34 @@ class Controller_Aiteru_Top extends Controller_Template
 		return $data;
 	}
 	
+	/**
+	 * 指定範囲内の検索　大まかな検索実行後　正確な2点間の距離を計測
+	 */
 	public function action_search()
 	{
 		$this->template->title = 'search';
 		
 		$data = array();
 		
+		$rootLat = Input::post('rootLat');
 		$data = Controller_Aiteru_Top::getRange(26.3257691, 127.78560189999996);
 		
 		
 		$view = View::forge('aiteru/search');
 		$view->set_global('data', $data);
+		
+		$query = DB::select()->from('shops');
+		$query->Where('gmap_lat', 'between', array($data['rangeLatS'], $data['rangeLatE']));
+		$query->Where('gmap_lng', 'between', array($data['rangeLngS'], $data['rangeLngE']));
+		$query->limit(100);
+		$result = $query->execute()->as_array();
+
+		foreach ($result as $shop)
+		{
+			
+		}
+		
+		$view->set_global('results', $result);
 		
 		//テンプレートに自分自身のviewを埋め込む
 		$this->template->content = View::forge('aiteru/search');
