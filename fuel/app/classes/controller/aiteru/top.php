@@ -39,7 +39,6 @@ class Controller_Aiteru_Top extends Controller_Template
 	public function action_shop()
 	{
 		$this->template->title = 'shop';
-		$data = array();
 		
 		$errors = array();
 		$errors['name'] = '';

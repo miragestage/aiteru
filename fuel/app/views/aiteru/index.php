@@ -33,7 +33,7 @@ try {
 	exit();
 }
 
-/*
+
 // ダミーテーブル作成
 echo "ダミーテーブル作成<br />";
 $sql = "DROP TABLE IF EXISTS `shops`;" . 
@@ -50,13 +50,13 @@ $sql = "INSERT INTO shops (name, gmap_lat, gmap_lng) " .
 "VALUES (:name1, :gmap_lat1, :gmap_lng1), (:name2,:gmap_lat2, :gmap_lng2)";
 
 $params = array(
-		'name1' => '中野レストラン','gmap_lat1' => 25.555, 'gmap_lng1' => 124.6555,
-		'name2' => '居酒屋コザ','gmap_lat2' => 25.234, 'gmap_lng2' => 124.5678,
+		'name1' => 'ローソン沖縄　山内店','gmap_lat1' => 26.328027017131358, 'gmap_lng1' => 127.781693566903640,
+		'name2' => 'ほっともっと球陽高校前店','gmap_lat2' => 26.320297716301113, 'gmap_lng2' => 127.786093745507740,
 );
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 echo print_r( $params ) . "<br />";
-*/
+
 
 // select実行
 echo "select実行<br />";
