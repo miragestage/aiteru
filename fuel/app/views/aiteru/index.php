@@ -33,7 +33,7 @@ try {
 	exit();
 }
 
-
+/*
 // ダミーテーブル作成
 echo "ダミーテーブル作成<br />";
 $sql = "DROP TABLE IF EXISTS `shops`;" . 
@@ -56,7 +56,7 @@ $params = array(
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 echo print_r( $params ) . "<br />";
-
+*/
 
 // select実行
 echo "select実行<br />";
