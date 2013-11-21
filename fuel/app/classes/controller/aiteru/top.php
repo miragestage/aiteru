@@ -229,6 +229,7 @@ class Controller_Aiteru_Top extends Controller_Template
 		
 		$data = array();
 		$result = array();
+		$rows = array();
 		
 		$rangeLimit = 500; //検索半径
 		$locationLat = 26.3257691;//緯度初期値
@@ -239,18 +240,35 @@ class Controller_Aiteru_Top extends Controller_Template
 		
 		if (Security::check_token())
 		{
-			$rangeLimit = Input::post('rangeLimit');
+			$rangeLimit = Input::post('rangeLimit');//検索半径
+			$locationLat = Input::post('rootLat');//現在地（緯度）
+			$locationLng = Input::post('rootLng');//現在地（経度）
+			
 			$data = Controller_Aiteru_Top::getRange($locationLat, $locationLng, $rangeLimit);
-				
+
+			//検索半径のデータ取得
 			$query = DB::select()->from('shops');
 			$query->Where('gmap_lat', 'between', array($data['rangeLatS'], $data['rangeLatE']));
 			$query->Where('gmap_lng', 'between', array($data['rangeLngS'], $data['rangeLngE']));
 			$query->limit(100);
-			$result = $query->execute()->as_array();
-	
-			foreach ($result as $shop)
+			$rows = $query->execute()->as_array();
+			
+			$i = 0;
+			foreach ($rows as $row)
 			{
+				$distance = sprintf("%.2f", Controller_Aiteru_Top::getDistance(
+					$locationLat, $locationLng, $row['gmap_lat'], $row['gmap_lng']) * 1000);
 				
+				if ($rangeLimit >= $distance )
+				{
+					$result[$i]['id'] = $row['id'];
+					$result[$i]['name'] = $row['name'];
+					$result[$i]['gmap_lat'] = $row['gmap_lat'];
+					$result[$i]['gmap_lng'] = $row['gmap_lng'];
+					$result[$i]['distance'] = $distance;
+					
+					$i++;
+				}
 			}
 		}
 		
@@ -264,8 +282,12 @@ class Controller_Aiteru_Top extends Controller_Template
 		$token['token_key'] = Config::get('security.csrf_token_key');
 		$token['token'] = Security::fetch_token();
 		
-		//範囲内のデータ
+		//範囲内のデータ（おおまか）
+		$view->set_global('rows', $rows);
+		
+		//範囲内のデータ（正確）
 		$view->set_global('results', $result);
+		
 		//security用トークン
 		$view->set_global('token', $token);
 		

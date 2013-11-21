@@ -72,7 +72,6 @@ $(function(){
 echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden'));
 ?>
 
-<p>おおまかな範囲の取得</p>
 <table class="table">
 <tr><th></th><th></th></tr>
 <tr>
@@ -129,12 +128,24 @@ echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden')
 
 <?php 
 echo "<br />";
-//print_r($results);
-foreach ($results as $shop)
+echo "<p>おおまかな範囲の取得</p>";
+
+foreach ($rows as $shop)
 {
-	echo $shop['name'];
-	echo $shop['gmap_lat'];
+	echo $shop['name'] . "  ";
+	echo $shop['gmap_lat'] . "  ";
 	echo $shop['gmap_lng'];
+	echo "<br />";
+}
+
+echo "<p>お店までの距離</p>";
+//print_r($results);
+
+foreach ($results as $result)
+{
+	echo $result['name'] . "  ";
+	echo $result['distance'] . "メートル";
+	
 	echo "<br />";
 }
 
