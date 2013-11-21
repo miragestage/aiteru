@@ -39,6 +39,8 @@ class Controller_Aiteru_Top extends Controller_Template
 	public function action_shop()
 	{
 		$this->template->title = 'shop';
+		$data = array();
+		
 		$errors = array();
 		$errors['name'] = '';
 		$errors['gmap_lat'] = '';
@@ -66,7 +68,6 @@ class Controller_Aiteru_Top extends Controller_Template
 			//検証実行
 			if($val->run())
 			{
-				$data = array();
 		
 				$data = array(
 					'name' => Input::post('name'),
