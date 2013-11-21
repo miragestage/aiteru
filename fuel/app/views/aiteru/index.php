@@ -43,7 +43,7 @@ $params = array();
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 
-/*
+
 // ダミーデータinsert
 echo "ダミーデータinsert<br />";
 $sql = "INSERT INTO shops (name, gmap_lat, gmap_lng) " . 
@@ -56,7 +56,7 @@ $params = array(
 $stmt = $pdo->prepare( $sql );
 $stmt->execute($params);
 echo print_r( $params ) . "<br />";
-*/
+
 
 // select実行
 echo "select実行<br />";
