@@ -46,7 +46,7 @@ body {
 	border: solid 2px #DCDCDC;
 	background-color: #F0FFF0;
 	border-radius: 10px;
-
+	
 }
 
 .sideAlphaWrap {

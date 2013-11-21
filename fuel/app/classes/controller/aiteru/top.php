@@ -121,4 +121,92 @@ class Controller_Aiteru_Top extends Controller_Template
 		return;
 		
 	}
+	
+	//二点間の距離を測定 
+	public function getDistance($lat1, $lng1, $lat2, $lng2)
+	{
+		//地球の半径(wikiより)
+		$r = 6378.150;
+		$pi = 3.14;
+		
+		//南北の緯度の差をラジアンに変換
+		$latRad = ($pi / 180 * ($lat1 - $lat2));
+		
+		//東西の緯度の差をラジアンに変換
+		$lngRad = ($pi / 180 * ($lng1 - $lng2));
+		
+		//南北の距離
+		$latDistance = $r * $latRad;
+		
+		//測定する緯度の半径 * 地球の半径 * 経度の差のラジアン 
+		$lngDistance = cos($pi / 180 * $lat1) * $r * $lngRad;
+		
+		//ピタゴラスの定理
+		return sqrt(pow($latDistance, 2) + pow($lngDistance, 2));
+	}
+	
+	//検索する範囲を作成
+	public function getRange($lat, $lng)
+	{
+		$data = array();
+		
+		//検索範囲 メートル
+		$rangeLimit = 500;
+		
+		//地球の半径(wikiより)
+		$r = 6378150;
+		
+		//円周率
+		//$pi = 3.14159265359;
+		$pi = 3.14;
+		
+		//地球の円周
+		$earth = 2 * $pi * $r;
+		
+		//一秒あたりの距離（緯度）
+		$secondLat = $earth/(360 * 60 * 60);
+		//検索範囲を度に変換（緯度始点）
+		$rangeLatS = $lat + ($rangeLimit / $secondLat / 60 / 60);
+		//検索範囲を度に変換（緯度終点）
+		$rangeLatE = $lat + (-$rangeLimit / $secondLat / 60 / 60);
+		
+		//一秒あたりの距離（経度）
+		$secondLng = ($earth * cos($lat / 180 * $pi)) / (360 * 60 * 60);
+		//検索範囲を度に変換（経度始点）
+		$rangeLngS = $lng + ($rangeLimit / $secondLng / 60 / 60);
+		//検索範囲を度に変換（経度終点）
+		$rangeLngE = $lng + (-$rangeLimit / $secondLng / 60 / 60);
+		
+		$data['earth'] = $earth;
+		$data['secondLat'] = $secondLat;
+		$data['rangeLatS'] = $rangeLatS;
+		$data['rangeLatE'] = $rangeLatE;
+		
+		$data['secondLng'] = $secondLng;
+		$data['rangeLngS'] = $rangeLngS;
+		$data['rangeLngE'] = $rangeLngE;
+		
+		$data['distance'] = Controller_Aiteru_Top::getDistance(
+				$rangeLatS, $rangeLngS, $rangeLatE, $rangeLngE);
+		
+		return $data;
+	}
+	
+	public function action_search()
+	{
+		$this->template->title = 'search';
+		
+		$data = array();
+		
+		$data = Controller_Aiteru_Top::getRange(26.3257691, 127.78560189999996);
+		
+		
+		$view = View::forge('aiteru/search');
+		$view->set_global('data', $data);
+		
+		//テンプレートに自分自身のviewを埋め込む
+		$this->template->content = View::forge('aiteru/search');
+		
+		return;
+	}
 }

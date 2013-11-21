@@ -9,7 +9,8 @@
 			<li><a href="/aiteru/top/gmap" class="text">グーグルマップ</a></li>
 			<li><a href="/aiteru/top/shop" class="text">店舗登録</a></li>
 			<li><a href="/aiteru/top/routem" class="text">ルートマップ</a></li>
-		</ul>
+			<li><a href="/aiteru/top/search" class="text">検索</a></li>
+			</ul>
 	</li>
 	<!-- 
 	<li class="treenodeopen"><a href="">マスタ管理</a>
