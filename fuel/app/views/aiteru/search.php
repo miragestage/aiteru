@@ -63,7 +63,7 @@ $(function(){
 
 
 <div class="search">
-<h1>search</h1>
+<h1>検索テスト</h1>
 <div id="title01"></div>
 
 
