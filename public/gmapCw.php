@@ -26,7 +26,8 @@ function MapOpen() {
 		lng: latLng.lng(),
 		zoom:16
 	});
-
+	
+  	
     //緯度・経度を表示
 	$("input[name='lat']").val(latLng.lat());
 	$("input[name='lng']").val(latLng.lng());
@@ -61,6 +62,7 @@ function changeMarkerPosition(lat, lng) {
 
 $(document).ready(function(){
 
+
   if (navigator.geolocation) {
 
     // 現在の位置情報を取得
@@ -71,8 +73,16 @@ $(document).ready(function(){
         //var location ="<li>"+"緯度：" + pos.coords.latitude + "</li>";
         //location += "<li>"+"経度：" + pos.coords.longitude + "</li>";
         //$("#location").html(location);
-        latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        MapOpen();
+        
+        var lat = parseFloat(window.opener.document.shop.gmap_lat.value);
+    	var lng = parseFloat(window.opener.document.shop.gmap_lng.value);
+    
+	    if ( isNaN(lat) || isNaN(lng) ) {
+		    latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+		} else {
+	    	latLng = new google.maps.LatLng(lat, lng);
+		}
+	    MapOpen();
       },
       // （2）位置情報の取得に失敗した場合
       function (error) {
@@ -173,6 +183,7 @@ function goBack(){
 
 	<ul id="location">
 	</ul>
+	
 
 </body>
 </html>

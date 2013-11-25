@@ -3,9 +3,28 @@
 
 $(function() {
 	$(".button_gmap").click(function(){
+
+		/*
+		$.post(
+			    "/gmapCw.php",                      // リクエストURL
+			    {"key1": "value1", "key2": "value2"}, // データ
+			    function(data, status) {
+			        // 通信成功時にデータを表示
+			        $("#test_result")
+			            .append("status:").append(status).append("<br/>")
+			            .append("data:").append(data).append("<br/>");
+			    },
+			    "html"                                 // 応答データ形式
+		);
+		*/
+		
 		window.open("/gmapCw.php", "WindowName","width=600,height=650,resizable=yes,scrollbars=no");
+
+		
 		return false;
 	});
+
+
 });
 </script>
 <style type="text/css">
@@ -57,7 +76,7 @@ echo Form::close();
 echo "</table>";
 ?>
 
-
+<div id="test_result"></div>
 
 <?php 
 echo "<br />";
