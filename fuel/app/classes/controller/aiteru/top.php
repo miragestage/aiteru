@@ -1,6 +1,7 @@
 <?php
 
 use Fuel\Core\Validation;
+
 class Controller_Aiteru_Top extends Controller_Template
 {
 
@@ -40,79 +41,218 @@ class Controller_Aiteru_Top extends Controller_Template
 	{
 		$this->template->title = 'shop';
 		
-		$errors = array();
-		$errors['name'] = '';
-		$errors['gmap_lat'] = '';
-		$errors['gmap_lng'] = '';
+		$errors = array(
+			'name' => '', 
+			'gmap_lat' => '', 
+			'gmap_lng' => ''
+		);
 		
-		//if (isset($_POST['save']))
-		//if (isset($_POST['save']) && Security::check_token())
-		//csrf対策　2度押し　F5キー対策
-		if (Security::check_token())
-		{
-			//バリデーションの設定
-			$val = Validation::forge();
-			
-			$val->add('name', 'お名前')
-				->add_rule('required');
-
-			$val->add('gmap_lat', '緯度')
-				->add_rule( 'required')
-				->add_rule('valid_string', array('numeric', 'dots'));
-			
-			$val->add('gmap_lng', '経度')
-				->add_rule( 'required')
-				->add_rule('valid_string', array('numeric', 'dots'));
-			
-			//検証実行
-			if($val->run())
-			{
-		
-				$data = array(
-					'name' => Input::post('name'),
-					'gmap_lat' => Input::post('gmap_lat'),
-					'gmap_lng' => Input::post('gmap_lng')
-				);
-		
-				//モデルのインスタンス化
-				$new=Model_Shop::forge($data);
-		
-				//データの保存
-				$new->save();
-				
-			}else{
-				
-			    foreach($val->error() as $key => $e)
-			    {
-			        $errors[$key] = $e->get_message();
-			        //echo $key;
- 				}
-			}
-		}
- 					
 		$data = Model_Shop::find_all();
 	
 		$view = View::forge('aiteru/shop');
 		
+		
+		$shop = array(
+			'id' => '',
+			'name' => '',
+			'gmap_lat' => '',
+			'gmap_lng' => ''
+		);
+ 		//店舗データ
+ 		$view->set_global('s', $shop);
+ 		$view->set_global('shops', $data);
+ 			
+		$view->set_global('errors', $errors);
+		
+		//Session::set('name', $data[0]['name']);
+		
 		//csrf対策用　2度押し　F5キー等の対策
 		$token['token_key'] = Config::get('security.csrf_token_key');
 		$token['token'] = Security::fetch_token();
-		
-		//エラーメッセージを各フィールド別に表示させる
- 		$view->set_global('errors', $errors);
-		
- 		//店舗データ
- 		$view->set_global('shops', $data);
- 		//security用トークン
+		//security用トークン
 		$view->set_global('token', $token);
-		
-		//Session::set('name', $data[0]['name']);
 		
 		//テンプレートに自分自身のviewを埋め込む
 		$this->template->content = View::forge('aiteru/shop');
 	
 		return;
 			
+	}
+	
+	public function action_save($id = null)
+	{
+		$this->template->title = 'save';
+		
+		$errors = array(
+				'name' => '',
+				'gmap_lat' => '',
+				'gmap_lng' => ''
+		);
+		
+		if (Security::check_token())
+		{
+			
+			//バリデーションの設定
+			$val = Validation::forge();
+				
+			$val->add('name', 'お名前')
+			->add_rule('required');
+		
+			$val->add('gmap_lat', '緯度')
+			->add_rule( 'required')
+			->add_rule('valid_string', array('numeric', 'dots'));
+				
+			$val->add('gmap_lng', '経度')
+			->add_rule( 'required')
+			->add_rule('valid_string', array('numeric', 'dots'));
+				
+			//検証実行
+			if($val->run())
+			{
+				if (!empty($id)) 
+				{
+					$data['id'] = $id;
+					$data['name'] =  Input::post('name');
+					$data['gmap_lat'] =  Input::post('gmap_lat');
+					$data['gmap_lng'] =  Input::post('gmap_lng');
+		
+					$shop = Model_Shop::find_by_pk($id);
+					//データ上書き更新
+					$shop->set($data);
+					$shop->save();
+					
+				} else {
+					
+					$data['name'] =  Input::post('name');
+					$data['gmap_lat'] =  Input::post('gmap_lat');
+					$data['gmap_lng'] =  Input::post('gmap_lng');
+						
+					//モデルのインスタンス化
+					$new = Model_Shop::forge($data);
+			
+					//データの保存
+					$new->save();
+				}
+				
+		
+			}else{
+				//validationエラーメッセージを取得
+				foreach($val->error() as $key => $e)
+				{
+					$errors[$key] = $e->get_message();
+					//echo $key;
+				}
+			}
+			
+		}
+		
+ 		$view = View::forge('aiteru/shop');
+		
+ 		$data = Model_Shop::find_all();
+ 			
+		$shop = array(
+			'id' => '',
+			'name' => '',
+			'gmap_lat' => '',
+			'gmap_lng' => ''
+		);
+ 		//店舗データ
+ 		$view->set_global('s', $shop);
+ 		$view->set_global('shops', $data);
+		
+		//エラーメッセージを各フィールド別に表示させる
+		$view->set_global('errors', $errors);
+		
+		//csrf対策用　2度押し　F5キー等の対策
+		$token['token_key'] = Config::get('security.csrf_token_key');
+		$token['token'] = Security::fetch_token();
+		//security用トークン
+		$view->set_global('token', $token);
+		
+		//テンプレートにshopのviewを埋め込む
+		$this->template->content = View::forge('aiteru/shop');
+		
+		
+	}
+	
+	/**
+	 * データの削除
+	 * @param string $id
+	 */
+	public function action_delete($id = null)
+	{
+		$this->template->title = 'データ削除';
+		
+		$shop = Model_Shop::find_by_pk($id);
+		$shop->delete();
+		
+ 		$view = View::forge('aiteru/shop');
+		
+ 		$data = Model_Shop::find_all();
+ 			
+		$errors = array(
+			'name' => '',
+			'gmap_lat' => '',
+			'gmap_lng' => ''
+		);
+ 		$shop = array(
+			'id' => '',
+			'name' => '',
+			'gmap_lat' => '',
+			'gmap_lng' => ''
+		);
+ 		//店舗データ
+ 		$view->set_global('s', $shop);
+ 		$view->set_global('shops', $data);
+		
+		//エラーメッセージを各フィールド別に表示させる
+		$view->set_global('errors', $errors);
+		
+		//csrf対策用　2度押し　F5キー等の対策
+		$token['token_key'] = Config::get('security.csrf_token_key');
+		$token['token'] = Security::fetch_token();
+		//security用トークン
+		$view->set_global('token', $token);
+		
+		//テンプレートにshopのviewを埋め込む
+		$this->template->content = View::forge('aiteru/shop');
+	}
+	
+	/**
+	 * shopデータ一件読み込み
+	 * @param string $id
+	 */
+	public function action_getShopById($id = null)
+	{
+		$this->template->title = 'データ表示';
+		$errors = array(
+			'name' => '',
+			'gmap_lat' => '',
+			'gmap_lng' => ''
+		);
+		
+		$view = View::forge('aiteru/shop');
+		
+		$shop = Model_Shop::find_by_pk($id);
+		
+		$data = Model_Shop::find_all();
+		
+		//店舗データ
+		$view->set_global('s', $shop);
+		$view->set_global('shops', $data);
+		
+		//エラーメッセージを各フィールド別に表示させる
+		$view->set_global('errors', $errors);
+		
+		//csrf対策用　2度押し　F5キー等の対策
+		$token['token_key'] = Config::get('security.csrf_token_key');
+		$token['token'] = Security::fetch_token();
+		//security用トークン
+		$view->set_global('token', $token);
+		
+		//テンプレートにshopのviewを埋め込む
+		$this->template->content = View::forge('aiteru/shop');
+		
 	}
 	
 	/**

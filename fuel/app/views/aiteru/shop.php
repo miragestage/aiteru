@@ -15,49 +15,63 @@ $(function() {
 }
 </style>
 <?php  
+echo "<table>";
 
-echo Form::open(array('action' => 'aiteru/top/shop', 'name' => "shop"));
-
-echo '<p>';
-
-echo Form::input('id', "", array('type' => 'hidden'));
-echo '</p>';
+echo Form::open(array('action' => '', 'name' => "shop"));
 
 echo '<p>';
-echo Form::label('お店の名前', 'name');
-echo Form::input('name', '', array('size' => 40));
-echo "<span class='error' >" .$errors['name'] ."</span>";
+echo Form::input('id', $s['id'], array('type' => 'hidden'));
 echo '</p>';
 
-echo '<p>';
-echo Form::label('緯度', 'gmap_lat');
-echo Form::input('gmap_lat',"", array('size' => 40));
-echo "<span class='error' >" .$errors['gmap_lat'] ."</span>";
-echo '</p>';
+echo '<tr>';
+echo "<td>". Form::label('お店の名前', 'name') ."</td>";
+echo "<td>". Form::input('name', $s['name'], array('size' => 40));
+echo "<span class='error' >" .$errors['name'] ."</span>" . "</td>";
+echo '</tr>';
 
-echo '<p>';
-echo Form::label('経度', 'gmap_lng');
-echo Form::input('gmap_lng',"", array('size' => 40));
-echo "<span class='error' >" .$errors['gmap_lng'] ."</span>";
-echo '</p>';
+echo '<tr>';
+echo "<td>". Form::label('緯度', 'gmap_lat'). "</td>";
+echo "<td>". Form::input('gmap_lat',$s['gmap_lat'], array('size' => 40));
+echo "<span class='error' >" .$errors['gmap_lat'] ."</span>" . "</td>";
+echo '</tr>';
+
+echo '<tr>';
+echo '<td>'. Form::label('経度', 'gmap_lng'). '</td>';
+echo '<td>'. Form::input('gmap_lng',$s['gmap_lng'], array('size' => 40));
+echo "<span class='error' >" .$errors['gmap_lng'] ."</span>" . '</td>';
+echo '</tr>';
 
 echo Form::input($token['token_key'], $token['token'], array('type' => 'hidden'));
 
-echo Form::submit('save', '登録');
+
+echo '<tr>';
+echo '<td>'. Form::button('save', '登録', 
+	array('onclick' => "this.form.action='/aiteru/top/save/".$s['id'] ."'")). '</td>';
+echo '<td>'. Form::button('delete', '削除', 
+	array('onclick' => "this.form.action='/aiteru/top/delete/".$s['id'] ."'")). '</td>';
+echo '<td>'. Form::button('map', '地図', array('class'=> 'button_gmap')). '</td>';
+
+echo '</tr>';
 
 echo Form::close();
+echo "</table>";
 ?>
 
-<input type="button" value="地図" class="button_gmap" >
+
 
 <?php 
 echo "<br />";
+echo "<table>";
+
 foreach ($shops as $shop)
 {
-	echo $shop['name'];
-	echo $shop['gmap_lat'];
-	echo $shop['gmap_lng'];
-	echo "<br />";
+	echo "<tr>";
+	echo "<td>"; echo $shop['id']; echo "</td>";
+	echo "<td>"; echo $shop['name']; echo "</td>";
+	echo "<td>"; echo $shop['gmap_lat']; echo "</td>";
+	echo "<td>"; echo $shop['gmap_lng']; echo "</td>";
+	echo "<td><a href='/aiteru/top/getShopById/" . $shop['id'] ."'>編集</a></td>";
+	echo "</tr>";
 }
-
+echo "</table>";
 ?>
